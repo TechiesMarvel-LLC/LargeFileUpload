@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Large File Upload Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .upload-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .drop-zone {
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            min-height: 100px;
+            position: relative;
+        }
+        .drop-zone.dragover {
+            background-color: #e1f5fe;
+            border-color: #2196f3;
+        }
+        .files-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .file-item {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .file-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .file-name {
+            font-weight: 500;
+            color: #495057;
+        }
+        .file-size {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        .file-progress {
+            margin-top: 8px;
+        }
+        .file-status {
+            font-size: 0.9em;
+            margin-top: 5px;
+            color: #6c757d;
+        }
+        .file-item.completed {
+            background-color: #e8f5e9;
+        }
+        .file-item.error {
+            background-color: #ffebee;
+        }
+        .progress-container {
+            margin-top: 20px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .progress {
+            width: 0%;
+            height: 100%;
+            background-color: #4CAF50;
+            transition: width 0.3s ease;
+        }
+        .file-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .upload-status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .chunk-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .chunk-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .chunk-size {
+            color: #495057;
+            font-weight: 500;
+        }
+        .chunk-count {
+            color: #0d6efd;
+            font-weight: 600;
+        }
+        button {
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #storageInfo {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .browse-button {
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-block;
+        }
+        .browse-button:hover {
+            background-color: #1976d2;
+        }
+        .browse-button.folder {
+            background-color: #4CAF50;
+        }
+        .browse-button.folder:hover {
+            background-color: #388E3C;
+        }
+        .drop-zone-text {
+            margin-bottom: 10px;
+            color: #666;
+        }
+        .drop-zone-hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <h1>Large File Upload Demo</h1>
+        <div class="drop-zone" id="dropZone">
+            <div class="drop-zone-text">Drag and drop files or folders here</div>
+            <div class="button-group">
+                <button class="browse-button" id="browseFilesButton">Browse Files</button>
+                <button class="browse-button folder" id="browseFoldersButton">Browse Folders</button>
+            </div>
+            <div class="drop-zone-hint">Click the buttons above to select files or folders</div>
+            <input type="file" id="fileInput" style="display: none;" multiple>
+            <input type="file" id="folderInput" style="display: none;" multiple webkitdirectory directory>
+        </div>
+        <div class="files-list" id="filesList"></div>
+        <div class="progress-container" style="display: none;" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+            <div class="file-info" id="fileInfo"></div>
+            <div class="chunk-info">
+                <div class="chunk-progress">
+                    <span class="chunk-size">Chunk Size: <span id="chunkSize">1MB</span></span>
+                    <span class="chunk-count">Chunks: <span id="completedChunks">0</span> / <span id="totalChunks">0</span></span>
+                </div>
+            </div>
+            <div class="upload-status" id="uploadStatus"></div>
+        </div>
+        <button id="uploadButton" disabled>Upload All</button>
+        <div id="storageInfo">
+            <h3>Storage Simulation</h3>
+            <p>Files will be stored in memory (simulating cloud storage)</p>
+            <div id="storageContents"></div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html> 
