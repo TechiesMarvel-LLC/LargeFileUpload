@@ -1,0 +1,228 @@
+{
+  "Version": 1,
+  "Hash": "xZSQVueL1ztt2tQgajgu3uTV/CYBgkKiOyY1rExPbKU=",
+  "Source": "FileUploadAPI",
+  "BasePath": "_content/FileUploadAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "FileUploadAPI\\wwwroot",
+      "Source": "FileUploadAPI",
+      "ContentRoot": "C:\\Srini\\PBGC\\LargeFileUpload\\wwwroot\\",
+      "BasePath": "_content/FileUploadAPI",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Srini\\PBGC\\LargeFileUpload\\wwwroot\\app.js",
+      "SourceId": "FileUploadAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Srini\\PBGC\\LargeFileUpload\\wwwroot\\",
+      "BasePath": "_content/FileUploadAPI",
+      "RelativePath": "app#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "x89zki3dxq",
+      "Integrity": "b1qHy7/5NfjvTrv19tb/LZENkev1d9IN7JfphPkvP2E=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\app.js"
+    },
+    {
+      "Identity": "C:\\Srini\\PBGC\\LargeFileUpload\\wwwroot\\index.html",
+      "SourceId": "FileUploadAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Srini\\PBGC\\LargeFileUpload\\wwwroot\\",
+      "BasePath": "_content/FileUploadAPI",
+      "RelativePath": "index#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "06g1q2c5om",
+      "Integrity": "6FXTfYv0KEn3nQIN3Bk2OikR6zwWIKLj9tHu9nTy1d4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "app.js",
+      "AssetFile": "C:\\Srini\\PBGC\\LargeFileUpload\\wwwroot\\app.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "19439"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"b1qHy7/5NfjvTrv19tb/LZENkev1d9IN7JfphPkvP2E=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 23 May 2025 13:40:19 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-b1qHy7/5NfjvTrv19tb/LZENkev1d9IN7JfphPkvP2E="
+        }
+      ]
+    },
+    {
+      "Route": "app.x89zki3dxq.js",
+      "AssetFile": "C:\\Srini\\PBGC\\LargeFileUpload\\wwwroot\\app.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "19439"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"b1qHy7/5NfjvTrv19tb/LZENkev1d9IN7JfphPkvP2E=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 23 May 2025 13:40:19 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "x89zki3dxq"
+        },
+        {
+          "Name": "label",
+          "Value": "app.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-b1qHy7/5NfjvTrv19tb/LZENkev1d9IN7JfphPkvP2E="
+        }
+      ]
+    },
+    {
+      "Route": "index.06g1q2c5om.html",
+      "AssetFile": "C:\\Srini\\PBGC\\LargeFileUpload\\wwwroot\\index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8592"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6FXTfYv0KEn3nQIN3Bk2OikR6zwWIKLj9tHu9nTy1d4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 23 May 2025 13:29:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "06g1q2c5om"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-6FXTfYv0KEn3nQIN3Bk2OikR6zwWIKLj9tHu9nTy1d4="
+        }
+      ]
+    },
+    {
+      "Route": "index.html",
+      "AssetFile": "C:\\Srini\\PBGC\\LargeFileUpload\\wwwroot\\index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8592"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6FXTfYv0KEn3nQIN3Bk2OikR6zwWIKLj9tHu9nTy1d4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 23 May 2025 13:29:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-6FXTfYv0KEn3nQIN3Bk2OikR6zwWIKLj9tHu9nTy1d4="
+        }
+      ]
+    }
+  ]
+}

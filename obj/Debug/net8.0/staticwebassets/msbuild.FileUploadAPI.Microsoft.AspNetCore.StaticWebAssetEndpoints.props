@@ -1,0 +1,28 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/FileUploadAPI/app.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-b1qHy7/5NfjvTrv19tb/LZENkev1d9IN7JfphPkvP2E="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"19439"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022b1qHy7/5NfjvTrv19tb/LZENkev1d9IN7JfphPkvP2E=\u0022"},{"Name":"Last-Modified","Value":"Fri, 23 May 2025 13:40:19 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FileUploadAPI/app.x89zki3dxq.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\app.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"x89zki3dxq"},{"Name":"integrity","Value":"sha256-b1qHy7/5NfjvTrv19tb/LZENkev1d9IN7JfphPkvP2E="},{"Name":"label","Value":"_content/FileUploadAPI/app.js"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"19439"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022b1qHy7/5NfjvTrv19tb/LZENkev1d9IN7JfphPkvP2E=\u0022"},{"Name":"Last-Modified","Value":"Fri, 23 May 2025 13:40:19 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FileUploadAPI/index.06g1q2c5om.html">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"06g1q2c5om"},{"Name":"integrity","Value":"sha256-6FXTfYv0KEn3nQIN3Bk2OikR6zwWIKLj9tHu9nTy1d4="},{"Name":"label","Value":"_content/FileUploadAPI/index.html"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"8592"},{"Name":"Content-Type","Value":"text/html"},{"Name":"ETag","Value":"\u00226FXTfYv0KEn3nQIN3Bk2OikR6zwWIKLj9tHu9nTy1d4=\u0022"},{"Name":"Last-Modified","Value":"Fri, 23 May 2025 13:29:05 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FileUploadAPI/index.html">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\index.html'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-6FXTfYv0KEn3nQIN3Bk2OikR6zwWIKLj9tHu9nTy1d4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"8592"},{"Name":"Content-Type","Value":"text/html"},{"Name":"ETag","Value":"\u00226FXTfYv0KEn3nQIN3Bk2OikR6zwWIKLj9tHu9nTy1d4=\u0022"},{"Name":"Last-Modified","Value":"Fri, 23 May 2025 13:29:05 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+  </ItemGroup>
+</Project>

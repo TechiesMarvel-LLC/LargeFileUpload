@@ -1,57 +1,162 @@
-// Simulated storage in memory
-const storage = {
-    chunks: new Map(),
-    files: new Map(),
-    
-    // Store a chunk
-    storeChunk(fileName, chunkIndex, chunkData) {
-        if (!this.chunks.has(fileName)) {
-            this.chunks.set(fileName, new Map());
-        }
-        this.chunks.get(fileName).set(chunkIndex, chunkData);
-    },
-    
-    // Check if all chunks are present
-    hasAllChunks(fileName, totalChunks) {
-        const fileChunks = this.chunks.get(fileName);
-        if (!fileChunks) return false;
-        
-        for (let i = 0; i < totalChunks; i++) {
-            if (!fileChunks.has(i)) return false;
-        }
-        return true;
-    },
-    
-    // Combine chunks into a complete file
-    combineChunks(fileName, totalChunks) {
-        const fileChunks = this.chunks.get(fileName);
-        if (!fileChunks) return null;
-        
+// Storage using IndexedDB
+class FileStorage {
+    constructor() {
+        this.dbName = 'FileUploadDB';
+        this.dbVersion = 1;
+        this.storeName = 'files';
+        this.chunksStoreName = 'chunks';
+        this.initDB();
+    }
+
+    async initDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, this.dbVersion);
+
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => resolve(request.result);
+
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                
+                // Create files store
+                if (!db.objectStoreNames.contains(this.storeName)) {
+                    db.createObjectStore(this.storeName, { keyPath: 'name' });
+                }
+                
+                // Create chunks store
+                if (!db.objectStoreNames.contains(this.chunksStoreName)) {
+                    db.createObjectStore(this.chunksStoreName, { keyPath: ['fileName', 'chunkIndex'] });
+                }
+            };
+        });
+    }
+
+    async storeChunk(fileName, chunkIndex, chunkData) {
+        const db = await this.initDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([this.chunksStoreName], 'readwrite');
+            const store = transaction.objectStore(this.chunksStoreName);
+            
+            const request = store.put({
+                fileName,
+                chunkIndex,
+                data: chunkData
+            });
+
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async getChunk(fileName, chunkIndex) {
+        const db = await this.initDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([this.chunksStoreName], 'readonly');
+            const store = transaction.objectStore(this.chunksStoreName);
+            
+            const request = store.get([fileName, chunkIndex]);
+
+            request.onsuccess = () => resolve(request.result?.data);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async hasAllChunks(fileName, totalChunks) {
+        const db = await this.initDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([this.chunksStoreName], 'readonly');
+            const store = transaction.objectStore(this.chunksStoreName);
+            
+            const request = store.index('fileName').getAll(fileName);
+            
+            request.onsuccess = () => {
+                const chunks = request.result;
+                resolve(chunks.length === totalChunks);
+            };
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async combineChunks(fileName, totalChunks) {
         const chunks = [];
         for (let i = 0; i < totalChunks; i++) {
-            chunks.push(fileChunks.get(i));
+            const chunk = await this.getChunk(fileName, i);
+            if (!chunk) return null;
+            chunks.push(chunk);
         }
-        
-        // Combine chunks into a single Blob
+
         const completeFile = new Blob(chunks, { type: 'application/octet-stream' });
-        this.files.set(fileName, completeFile);
         
-        // Clean up chunks
-        this.chunks.delete(fileName);
-        
-        return completeFile;
-    },
-    
-    // Get stored file
-    getFile(fileName) {
-        return this.files.get(fileName);
-    },
-    
-    // List all stored files
-    listFiles() {
-        return Array.from(this.files.keys());
+        // Store the complete file
+        const db = await this.initDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([this.storeName], 'readwrite');
+            const store = transaction.objectStore(this.storeName);
+            
+            const request = store.put({
+                name: fileName,
+                data: completeFile,
+                size: completeFile.size,
+                type: completeFile.type,
+                lastModified: new Date().getTime()
+            });
+
+            request.onsuccess = () => {
+                // Clean up chunks
+                this.cleanupChunks(fileName);
+                resolve(completeFile);
+            };
+            request.onerror = () => reject(request.error);
+        });
     }
-};
+
+    async cleanupChunks(fileName) {
+        const db = await this.initDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([this.chunksStoreName], 'readwrite');
+            const store = transaction.objectStore(this.chunksStoreName);
+            
+            const request = store.index('fileName').openCursor(fileName);
+            
+            request.onsuccess = (event) => {
+                const cursor = event.target.result;
+                if (cursor) {
+                    store.delete(cursor.primaryKey);
+                    cursor.continue();
+                } else {
+                    resolve();
+                }
+            };
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async getFile(fileName) {
+        const db = await this.initDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([this.storeName], 'readonly');
+            const store = transaction.objectStore(this.storeName);
+            
+            const request = store.get(fileName);
+
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async listFiles() {
+        const db = await this.initDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([this.storeName], 'readonly');
+            const store = transaction.objectStore(this.storeName);
+            
+            const request = store.getAll();
+
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+}
 
 class FileUploader {
     constructor() {
@@ -59,6 +164,8 @@ class FileUploader {
         this.files = new Map(); // Map to store file upload states
         this.uploadInProgress = false;
         this.uploadPaused = false;
+        this.storage = new FileStorage();
+        this.currentUploadSession = null;
 
         this.initializeElements();
         this.initializeEventListeners();
@@ -145,6 +252,12 @@ class FileUploader {
                 if (entry) {
                     entries.push(entry);
                 }
+            } else if (entry.isDirectory) {
+                const dirReader = entry.createReader();
+                const entries = await new Promise((resolve) => {
+                    dirReader.readEntries((entries) => resolve(entries));
+                });
+                await this.processEntries(entries);
             }
         }
         await this.processEntries(entries);
@@ -246,20 +359,27 @@ class FileUploader {
             return;
         }
 
-        this.uploadInProgress = true;
-        this.uploadPaused = false;
-        this.uploadButton.textContent = 'Pause Upload';
-        this.progressContainer.style.display = 'block';
+        try {
+            this.uploadInProgress = true;
+            this.uploadPaused = false;
+            this.uploadButton.textContent = 'Pause Upload';
+            this.progressContainer.style.display = 'block';
 
-        for (const [fileName, fileState] of this.files) {
-            if (fileState.status === 'pending' || fileState.status === 'paused') {
-                await this.uploadFile(fileName, fileState);
+            for (const [fileName, fileState] of this.files) {
+                if (fileState.status === 'pending' || fileState.status === 'paused') {
+                    await this.uploadFile(fileName, fileState);
+                }
             }
-        }
 
-        this.uploadInProgress = false;
-        this.uploadButton.textContent = 'Upload Complete';
-        this.uploadButton.disabled = true;
+            this.uploadInProgress = false;
+            this.uploadButton.textContent = 'Upload Complete';
+            this.uploadButton.disabled = true;
+        } catch (error) {
+            console.error('Error during upload:', error);
+            this.uploadInProgress = false;
+            this.uploadButton.textContent = 'Upload Failed';
+            this.uploadButton.disabled = false;
+        }
     }
 
     async uploadFile(fileName, fileState) {
@@ -292,22 +412,36 @@ class FileUploader {
         const chunk = fileState.file.slice(start, end);
 
         try {
-            // Simulate network delay
-            await new Promise(resolve => setTimeout(resolve, 100));
+            const formData = new FormData();
+            formData.append('chunk', new File([chunk], 'chunk', { type: 'application/octet-stream' }));
+            formData.append('fileName', fileName);
+            formData.append('chunkIndex', fileState.currentChunk.toString());
+            formData.append('totalChunks', fileState.totalChunks.toString());
+
+            const response = await fetch('api/FileUpload/chunk', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Upload failed');
+            }
+
+            const result = await response.json();
             
-            // Store the chunk in our simulated storage
-            storage.storeChunk(fileName, fileState.currentChunk, chunk);
-            
-            // Check if this was the last chunk
-            if (fileState.currentChunk === fileState.totalChunks - 1) {
-                const completeFile = storage.combineChunks(fileName, fileState.totalChunks);
-                if (completeFile) {
-                    this.updateStorageDisplay();
-                }
+            if (!result.success) {
+                throw new Error(result.message);
             }
 
             fileState.uploadedChunks.add(fileState.currentChunk);
             this.updateFileProgress(fileName, fileState);
+
+            // If this was the last chunk, update the storage display
+            if (result.filePath) {
+                this.currentUploadSession = result.filePath.split('/')[2]; // Get session folder name
+                this.updateStorageDisplay();
+            }
         } catch (error) {
             console.error('Error uploading chunk:', error);
             fileState.element.classList.add('error');
@@ -334,13 +468,42 @@ class FileUploader {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
-    updateStorageDisplay() {
-        const files = storage.listFiles();
-        this.storageContents.innerHTML = files.length > 0 
-            ? files.map(file => `<div>${file} (${this.formatFileSize(storage.getFile(file).size)})</div>`).join('')
-            : '<div>No files stored</div>';
+    async updateStorageDisplay() {
+        try {
+            const response = await fetch('api/FileUpload/files');
+            const files = await response.json();
+            
+            this.storageContents.innerHTML = files.length > 0 
+                ? files.map(file => `
+                    <div class="stored-file">
+                        <span class="file-name">${file.name}</span>
+                        <span class="file-size">${this.formatFileSize(file.size)}</span>
+                        <a href="${file.path}" target="_blank" class="download-link">Download</a>
+                    </div>
+                `).join('')
+                : '<div>No files stored</div>';
+        } catch (error) {
+            console.error('Error updating storage display:', error);
+            this.storageContents.innerHTML = '<div>Error loading files</div>';
+        }
     }
 }
+
+// Add download function to window object
+window.downloadFile = async function(fileName) {
+    const storage = new FileStorage();
+    const file = await storage.getFile(fileName);
+    if (file) {
+        const url = URL.createObjectURL(file.data);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+};
 
 // Initialize the uploader when the page loads
 document.addEventListener('DOMContentLoaded', () => {

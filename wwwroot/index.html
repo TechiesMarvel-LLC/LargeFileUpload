@@ -178,6 +178,66 @@
             color: #999;
             margin-top: 5px;
         }
+        .stored-file {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stored-file .file-name {
+            font-weight: 500;
+            color: #495057;
+        }
+        .stored-file .file-size {
+            color: #6c757d;
+            margin: 0 10px;
+        }
+        .download-link {
+            color: #2196f3;
+            text-decoration: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background-color: #e3f2fd;
+        }
+        .download-link:hover {
+            background-color: #bbdefb;
+        }
+        .upload-session-info {
+            background-color: #e3f2fd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #1976d2;
+        }
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            animation: fadeIn 0.3s ease-in;
+        }
+        .file-status.saved {
+            color: #2e7d32;
+            font-weight: 500;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .warning {
+            background-color: #fff3e0;
+            color: #e65100;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #e65100;
+        }
     </style>
 </head>
 <body>

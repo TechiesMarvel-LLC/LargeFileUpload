@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Srini\\PBGC\\LargeFileUpload\\wwwroot\\app.js",
+      "PackagePath": "staticwebassets\\app.js"
+    },
+    {
+      "Id": "C:\\Srini\\PBGC\\LargeFileUpload\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.FileUploadAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.FileUploadAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.FileUploadAPI.props",
+      "PackagePath": "build\\FileUploadAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.FileUploadAPI.props",
+      "PackagePath": "buildMultiTargeting\\FileUploadAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.FileUploadAPI.props",
+      "PackagePath": "buildTransitive\\FileUploadAPI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
